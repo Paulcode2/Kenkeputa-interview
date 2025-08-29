@@ -1,4 +1,5 @@
 import React, { useContext, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { ShopContext } from '../context/ShopContext';
 
 const Cart = () => {
@@ -83,9 +84,11 @@ const Cart = () => {
                 >
                   Clear Cart
                 </button>
-                <button className="px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
-                  Proceed to Checkout
-                </button>
+                <Link to="/place">
+                  <button className="px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+                    Proceed to Checkout
+                  </button>
+                </Link>
               </div>
             </div>
           </div>
@@ -95,9 +98,9 @@ const Cart = () => {
           <div className="text-6xl mb-4">🛒</div>
           <h2 className="text-2xl font-bold mb-4">Your cart is empty</h2>
           <p className="text-gray-600 mb-6">Add some products to get started!</p>
-          <a href="/" className="px-6 py-3 bg-blue-600 text-white rounded hover:bg-blue-700">
+          <Link to="/" className="px-6 py-3 bg-blue-600 text-white rounded hover:bg-blue-700 inline-block">
             Continue Shopping
-          </a>
+          </Link>
         </div>
       )}
     </div>

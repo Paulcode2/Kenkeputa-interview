@@ -4,6 +4,14 @@ import Cart from "../models/Cart.js";
 
 export const createOrder = async (req, res, next) => {
   try {
+    console.log('Order request body:', req.body); // Debug log
+    console.log('User from auth:', req.user); // Debug log
+
+    if (!req.user || !req.user.id) {
+      console.error('No authenticated user found');
+      return res.status(401).json({ message: "Authentication required" });
+    }
+
     const { items, shippingAddress, paymentMethod } = req.body;
 
     if (!items || items.length === 0) {
@@ -14,13 +22,16 @@ export const createOrder = async (req, res, next) => {
       return res.status(400).json({ message: "Shipping address and payment method required" });
     }
 
+    console.log('Processing items:', items); // Debug log
     let totalAmount = 0;
     const orderItems = [];
 
     // Validate items and calculate total
     for (const item of items) {
+      console.log('Processing item:', item); // Debug log
       const product = await Product.findById(item.product);
       if (!product) {
+        console.log(`Product not found: ${item.product}`); // Debug log
         return res.status(404).json({ message: `Product ${item.product} not found` });
       }
 
@@ -41,7 +52,10 @@ export const createOrder = async (req, res, next) => {
       totalAmount += product.price * item.quantity;
     }
 
+    console.log('Order items created:', orderItems); // Debug log
+
     // Create order
+    console.log('Creating order with user:', req.user?.id); // Debug log
     const order = await Order.create({
       user: req.user.id,
       items: orderItems,
@@ -50,6 +64,21 @@ export const createOrder = async (req, res, next) => {
       paymentMethod,
       paymentStatus: paymentMethod === "card" ? "paid" : "pending",
     });
+
+    console.log('Order created:', order); // Debug log
+    console.log('Order ID:', order?._id); // Debug log
+    console.log('Order type:', typeof order); // Debug log
+    console.log('Order keys:', order ? Object.keys(order) : 'No order'); // Debug log
+
+    if (!order) {
+      console.error('Order creation failed - order is null/undefined');
+      return res.status(500).json({ message: "Failed to create order" });
+    }
+
+    if (!order._id) {
+      console.error('Order created but missing _id:', order);
+      return res.status(500).json({ message: "Order created but missing ID" });
+    }
 
     // Deduct inventory
     for (const item of orderItems) {
@@ -63,6 +92,9 @@ export const createOrder = async (req, res, next) => {
       { user: req.user.id },
       { items: [] }
     );
+
+    console.log('Final order to send:', order); // Debug log
+    console.log('Response structure:', { message: "Order created successfully", order }); // Debug log
 
     res.status(201).json({
       message: "Order created successfully",

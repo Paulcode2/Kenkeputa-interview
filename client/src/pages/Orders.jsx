@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 
 const Orders = () => {
   const [orders, setOrders] = useState([]);
@@ -122,9 +123,9 @@ const Orders = () => {
           <div className="text-6xl mb-4">📦</div>
           <h2 className="text-2xl font-bold mb-4">No orders yet</h2>
           <p className="text-gray-600 mb-6">Your order history will appear here once you make a purchase.</p>
-          <a href="/" className="px-6 py-3 bg-blue-600 text-white rounded hover:bg-blue-700">
+          <Link to="/" className="px-6 py-3 bg-blue-600 text-white rounded hover:bg-blue-700 inline-block">
             Start Shopping
-          </a>
+          </Link>
         </div>
       )}
     </div>

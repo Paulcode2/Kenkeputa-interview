@@ -1,7 +1,7 @@
-import request from "supertest";
-import app from "../app.js";
-import mongoose from "mongoose";
-import User from "../models/User.js";
+const request = require("supertest");
+const app = require("../app.js");
+const mongoose = require("mongoose");
+const User = require("../models/User.js");
 
 describe("Auth API", () => {
   beforeAll(async () => {
