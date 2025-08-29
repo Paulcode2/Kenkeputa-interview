@@ -94,10 +94,10 @@ async function seed() {
     await mongoose.connect(process.env.MONGO_URI);
     await Product.deleteMany({});
     await Product.insertMany(seedProducts);
-    console.log("Seed data inserted");
-    process.exit();
+    console.log("Seed data inserted successfully");
+    process.exit(0);
   } catch (err) {
-    console.error(err);
+    console.error("Seeding error:", err);
     process.exit(1);
   }
 }

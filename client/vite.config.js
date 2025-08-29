@@ -12,8 +12,3 @@ export default defineConfig({
     },
   },
 });
-
-
-// StMkaNYlDdO1Tovz - password
-// paullevites84_db_user - username
-// mongodb+srv://paullevites84_db_user:StMkaNYlDdO1Tovz@kenkeputa.pukkvqk.mongodb.net/

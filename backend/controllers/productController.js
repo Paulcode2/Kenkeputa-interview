@@ -29,8 +29,8 @@ export const getProductById = async (req, res, next) => {
 export const createProduct = async (req, res, next) => {
   try {
     let { name, description, price, image, stock, category } = req.body;
-    if (!name || !price || stock == null)
-      return res.status(400).json({ message: "Missing required fields" });
+    if (!name || !price || stock === null || stock === undefined || stock < 0)
+      return res.status(400).json({ message: "Missing required fields or invalid stock value" });
     // Ensure image is always an array
     if (image && !Array.isArray(image)) {
       image = [image];

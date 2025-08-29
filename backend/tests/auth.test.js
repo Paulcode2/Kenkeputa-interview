@@ -5,7 +5,8 @@ import User from "../models/User.js";
 
 describe("Auth API", () => {
   beforeAll(async () => {
-    await mongoose.connect("mongodb://localhost:27017/tfawe_test");
+    const testDbUri = process.env.MONGO_URI_TEST || process.env.MONGO_URI || "mongodb://localhost:27017/tfawe_test";
+    await mongoose.connect(testDbUri.replace('/tfawe', '/tfawe_test'));
     await User.deleteMany();
   });
   afterAll(async () => {

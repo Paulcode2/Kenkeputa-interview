@@ -8,7 +8,9 @@ const productSchema = new mongoose.Schema(
     image: [{ type: String }],
     stock: { type: Number, required: true, min: 0 },
     category: { type: String },
+    subCategory: { type: String },
     accessories: { type: Boolean, default: false },
+    bestseller: { type: Boolean, default: false },
   },
   { timestamps: true }
 );
