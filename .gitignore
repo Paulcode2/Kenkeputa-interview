@@ -1,5 +1,4 @@
-backend/.env*
+.env
 backend/node_modules
-client/.env*
 client/node_modules
 dist
