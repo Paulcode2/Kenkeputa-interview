@@ -1,4 +1,4 @@
-# TFAWE E-Commerce Application
+# Kenkeputa Project - TFAWE Revamp
 
 A full-stack e-commerce application built with React and Node.js, featuring user authentication, product management, shopping cart, order processing, and an admin panel.
 
