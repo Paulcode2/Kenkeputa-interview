@@ -1,4 +1,6 @@
-.env
+# Ignore environment files
+client/.env
+backend/.env
 backend/node_modules
 client/node_modules
 dist

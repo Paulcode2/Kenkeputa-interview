@@ -18,7 +18,11 @@ app.use(express.json());
 // Enable CORS for dev and production frontend
 app.use(
   cors({
-    origin: ["http://localhost:5173", "https://tfawe-frontend.onrender.com"],
+    origin: [
+      "http://localhost:5173",
+      "https://tfawe-frontend.onrender.com",
+      "https://tfawe-revamp.vercel.app",
+    ],
     credentials: true,
   })
 );
