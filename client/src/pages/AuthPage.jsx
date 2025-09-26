@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import AuthForm from "../components/AuthForm";
 import { useNavigate } from "react-router-dom";
 
@@ -6,13 +6,19 @@ const AuthPage = () => {
   const [user, setUser] = useState(null);
   const navigate = useNavigate();
 
+  // Redirect logged-in user automatically
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      navigate("/"); // Redirect to home/dashboard if already logged in
+    }
+  }, [navigate]);
+
   const handleAuthSuccess = (data) => {
-    // Save token to localStorage or context
     if (data.token) {
       localStorage.setItem("token", data.token);
       setUser(data);
-      // Redirect to home or admin page
-      navigate("/");
+      navigate("/"); // Redirect after successful login/signup
     }
   };
 

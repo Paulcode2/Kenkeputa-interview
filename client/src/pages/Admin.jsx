@@ -9,6 +9,8 @@ const Admin = () => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(false);
 
+  const API_BASE_URL = import.meta.env.VITE_REACT_APP_API_URL;
+
   useEffect(() => {
     fetchAdminData();
   }, [activeTab]);
@@ -20,15 +22,19 @@ const Admin = () => {
       const headers = { Authorization: `Bearer ${token}` };
 
       if (activeTab === "products") {
-        const res = await fetch("/api/admin/products", { headers });
+        const res = await fetch(`${API_BASE_URL}/api/admin/products`, {
+          headers,
+        });
         const data = await res.json();
         setAdminProducts(data.products || []);
       } else if (activeTab === "orders") {
-        const res = await fetch("/api/admin/orders", { headers });
+        const res = await fetch(`${API_BASE_URL}/api/admin/orders`, {
+          headers,
+        });
         const data = await res.json();
         setOrders(data);
       } else if (activeTab === "users") {
-        const res = await fetch("/api/admin/users", { headers });
+        const res = await fetch(`${API_BASE_URL}/api/admin/users`, { headers });
         const data = await res.json();
         setUsers(data);
       }
@@ -44,13 +50,16 @@ const Admin = () => {
 
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch(`/api/admin/products/${productId}`, {
-        method: "DELETE",
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const res = await fetch(
+        `${API_BASE_URL}/api/admin/products/${productId}`,
+        {
+          method: "DELETE",
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
 
       if (res.ok) {
-        setAdminProducts(adminProducts.filter(p => p._id !== productId));
+        setAdminProducts(adminProducts.filter((p) => p._id !== productId));
         alert("Product deleted successfully");
       } else {
         alert("Failed to delete product");
@@ -64,19 +73,24 @@ const Admin = () => {
   const handleUpdateOrderStatus = async (orderId, newStatus) => {
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch(`/api/admin/orders/${orderId}/status`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ status: newStatus }),
-      });
+      const res = await fetch(
+        `${API_BASE_URL}/api/admin/orders/${orderId}/status`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ status: newStatus }),
+        }
+      );
 
       if (res.ok) {
-        setOrders(orders.map(order =>
-          order._id === orderId ? { ...order, status: newStatus } : order
-        ));
+        setOrders(
+          orders.map((order) =>
+            order._id === orderId ? { ...order, status: newStatus } : order
+          )
+        );
         alert("Order status updated successfully");
       } else {
         alert("Failed to update order status");
@@ -123,15 +137,20 @@ const Admin = () => {
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {adminProducts.map((product) => (
-                <div key={product._id} className="bg-white rounded-lg shadow-md p-4">
+                <div
+                  key={product._id}
+                  className="bg-white rounded-lg shadow-md p-4"
+                >
                   <img
-                    src={`http://localhost:5000${product.image?.[0] || ""}`}
+                    src={`${API_BASE_URL}${product.image?.[0] || ""}`}
                     alt={product.name}
                     className="w-full h-48 object-cover rounded mb-4"
                   />
                   <h3 className="text-lg font-semibold mb-2">{product.name}</h3>
                   <p className="text-gray-600 mb-2">${product.price}</p>
-                  <p className="text-sm text-gray-500 mb-4">Stock: {product.stock}</p>
+                  <p className="text-sm text-gray-500 mb-4">
+                    Stock: {product.stock}
+                  </p>
                   <div className="flex space-x-2">
                     <button className="bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700">
                       Edit
@@ -160,12 +179,21 @@ const Admin = () => {
           ) : (
             <div className="space-y-4">
               {orders.map((order) => (
-                <div key={order._id} className="bg-white rounded-lg shadow-md p-6">
+                <div
+                  key={order._id}
+                  className="bg-white rounded-lg shadow-md p-6"
+                >
                   <div className="flex justify-between items-start mb-4">
                     <div>
-                      <h3 className="text-lg font-semibold">Order #{order._id.slice(-8)}</h3>
-                      <p className="text-gray-600">User: {order.user?.name || order.user?.email}</p>
-                      <p className="text-gray-600">Total: ${order.totalAmount}</p>
+                      <h3 className="text-lg font-semibold">
+                        Order #{order._id.slice(-8)}
+                      </h3>
+                      <p className="text-gray-600">
+                        User: {order.user?.name || order.user?.email}
+                      </p>
+                      <p className="text-gray-600">
+                        Total: ${order.totalAmount}
+                      </p>
                     </div>
                     <div className="text-right">
                       <p className="text-sm text-gray-500">
@@ -173,7 +201,9 @@ const Admin = () => {
                       </p>
                       <select
                         value={order.status}
-                        onChange={(e) => handleUpdateOrderStatus(order._id, e.target.value)}
+                        onChange={(e) =>
+                          handleUpdateOrderStatus(order._id, e.target.value)
+                        }
                         className="mt-2 px-3 py-1 border rounded text-sm"
                       >
                         <option value="pending">Pending</option>
@@ -187,7 +217,9 @@ const Admin = () => {
                   <div className="space-y-2">
                     {order.items.map((item, idx) => (
                       <div key={idx} className="flex justify-between text-sm">
-                        <span>{item.name} x {item.quantity}</span>
+                        <span>
+                          {item.name} x {item.quantity}
+                        </span>
                         <span>${item.price * item.quantity}</span>
                       </div>
                     ))}
@@ -228,8 +260,12 @@ const Admin = () => {
                 <tbody className="bg-white divide-y divide-gray-200">
                   {users.map((user) => (
                     <tr key={user._id}>
-                      <td className="px-6 py-4 whitespace-nowrap">{user.name}</td>
-                      <td className="px-6 py-4 whitespace-nowrap">{user.email}</td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        {user.name}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        {user.email}
+                      </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         {user.isAdmin ? "Yes" : "No"}
                       </td>

@@ -6,6 +6,8 @@ const AuthForm = ({ onAuthSuccess }) => {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
+  const apiUrl = import.meta.env.VITE_REACT_APP_API_URL || "";
+
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
@@ -14,21 +16,26 @@ const AuthForm = ({ onAuthSuccess }) => {
     e.preventDefault();
     setError("");
     setLoading(true);
+
     try {
-      const apiUrl = import.meta.env.VITE_REACT_APP_API_URL || "";
       const url = isLogin
         ? `${apiUrl}/api/auth/login`
         : `${apiUrl}/api/auth/signup`;
+
       const body = isLogin
         ? { email: form.email, password: form.password }
         : { name: form.name, email: form.email, password: form.password };
+
       const res = await fetch(url, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
       });
+
       const data = await res.json();
+
       if (!res.ok) throw new Error(data.message || "Authentication failed");
+
       if (onAuthSuccess) onAuthSuccess(data);
     } catch (err) {
       setError(err.message);
@@ -42,6 +49,7 @@ const AuthForm = ({ onAuthSuccess }) => {
       <h2 className="text-2xl font-bold mb-4 text-center">
         {isLogin ? "Login" : "Sign Up"}
       </h2>
+
       <form onSubmit={handleSubmit} className="space-y-4">
         {!isLogin && (
           <input
@@ -72,7 +80,9 @@ const AuthForm = ({ onAuthSuccess }) => {
           className="w-full p-2 border rounded"
           required
         />
+
         {error && <div className="text-red-500 text-sm">{error}</div>}
+
         <button
           type="submit"
           className="w-full bg-black text-white py-2 rounded hover:bg-gray-800"
@@ -81,6 +91,7 @@ const AuthForm = ({ onAuthSuccess }) => {
           {loading ? "Please wait..." : isLogin ? "Login" : "Sign Up"}
         </button>
       </form>
+
       <div className="mt-4 text-center">
         {isLogin ? (
           <span>
